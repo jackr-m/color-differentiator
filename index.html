@@ -16,7 +16,7 @@
     }
     function getDimmerColor(original) {
       let color = parseInt(original.slice(1), 16);
-      let subtract_value = 0;
+      let subtract_value;
       let channel = Math.floor(Math.random() * 3);
       if (channel === 0) {
         subtract_value = 0x010000;
@@ -31,7 +31,7 @@
       // console.log("Dimmer color generated: " + color);
       return color;
     }
-    function setColors(left_indicator) {
+    function setColors() {
       let first_side = Math.floor(Math.random() * 2)
       let original_color = getRandomColor();
       let dimmer_color = getDimmerColor(original_color);
@@ -80,19 +80,18 @@
 <!--  </style>-->
 </head>
 <body onload="setColors();">
-<body>
-<div id="container" style="width:1500px; margin:auto;">
-  <div id="colorBox1" style="width:600px;height:600px;float:left;background-color:#000";></div>
-  <div id="colorBox2" style="width:600px;height:600px;float:right;background-color:#000";></div>
+<div id="container" style="width:90%; height:80vh; margin:auto;">
+  <div id="colorBox1" style="width:40vw;height:90%;padding:10px;float:left;border-radius:20px;background-color:#000"></div>
+  <div id="colorBox2" style="width:40vw;height:90%;padding:10px;float:right;border-radius:20px;background-color:#000"></div>
 </div>
 <div style="clear: both;"></div>
-<br>
 <div style="text-align:center;">
-  <button onclick="checkColors(left_lighter, true);">Left one is Lighter</button>
-  <button onclick="checkColors(left_lighter, false);">Left one is Darker</button>
+  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="checkColors(left_lighter, true);">Left one is Lighter</button>
+  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="checkColors(left_lighter, false);">Left one is Darker</button>
   <br>
   <br>
-  <button onclick="setColors(left_lighter);">New Color Set</button>
+  <br>
+  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="setColors();">New Color Set</button>
 </div>
 </body>
 </html>
