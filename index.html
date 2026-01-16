@@ -1,0 +1,98 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>
+    let left_lighter = false;
+    function getRandomColor() {
+      let  characters = '123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      // console.log("Random color generated: " + color)
+      return color;
+    }
+    function getDimmerColor(original) {
+      let color = parseInt(original.slice(1), 16);
+      let subtract_value = 0;
+      let channel = Math.floor(Math.random() * 3);
+      if (channel === 0) {
+        subtract_value = 0x010000;
+      } else if (channel === 1) {
+        subtract_value = 0x000100;
+      } else {
+        subtract_value = 0x000001;
+      }
+      color -= subtract_value;
+      color = color.toString(16).toUpperCase();
+      color = '#' + color;
+      // console.log("Dimmer color generated: " + color);
+      return color;
+    }
+    function setColors(left_indicator) {
+      let first_side = Math.floor(Math.random() * 2)
+      let original_color = getRandomColor();
+      let dimmer_color = getDimmerColor(original_color);
+      if (first_side === 0) {
+        $("#colorBox1").css("background-color", original_color);
+        $("#colorBox2").css("background-color", dimmer_color);
+        left_lighter = true;
+        console.log("Left color: " + original_color)
+        console.log("Right color: " + dimmer_color)
+      }
+      else {
+        $("#colorBox2").css("background-color", original_color);
+        $("#colorBox1").css("background-color", dimmer_color);
+        left_lighter = false;
+        console.log("Left color: " + dimmer_color)
+        console.log("Right color: " + original_color)
+      }
+      // console.log("Left lighter? " + left_lighter);
+    }
+    function checkColors(left_lighter, guess) {
+      // console.log("Left lighter? " + left_lighter)
+      // console.log("Guess: " + guess)
+      if (left_lighter === guess) {
+        $("#colorBox1").css("background-color", "#00FF00");
+        $("#colorBox2").css("background-color", "#00FF00");
+        // console.log("Correct!")
+      }
+      else {
+        $("#colorBox1").css("background-color", "#FF0000");
+        $("#colorBox2").css("background-color", "#FF0000");
+        // console.log("Incorrect!")
+      }
+      setTimeout(function() {
+        setColors(left_lighter);
+      }, 2000);
+    }
+  </script>
+  <title></title>
+  <!--  <style>-->
+<!--    #colorBox{-->
+<!--      font-size:100px;-->
+<!--      text-align:center;-->
+<!--      margin:50px auto;-->
+<!--      font-family:Arial, sans-serif;-->
+<!--    }-->
+<!--  </style>-->
+</head>
+<body onload="setColors();">
+<body>
+<div id="container" style="width:1500px; margin:auto;">
+  <div id="colorBox1" style="width:600px;height:600px;float:left;background-color:#000";></div>
+  <div id="colorBox2" style="width:600px;height:600px;float:right;background-color:#000";></div>
+</div>
+<div style="clear: both;"></div>
+<br>
+<div style="text-align:center;">
+  <button onclick="checkColors(left_lighter, true);">Left one is Lighter</button>
+  <button onclick="checkColors(left_lighter, false);">Left one is Darker</button>
+  <br>
+  <br>
+  <button onclick="setColors(left_lighter);">New Color Set</button>
+</div>
+</body>
+</html>
