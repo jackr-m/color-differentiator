@@ -5,6 +5,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script>
     let left_lighter = false;
+    let correct_guesses = 0;
+    let total_guesses = 0;
+    let win_streak = 0;
+    let previous_correct = false;
     function getRandomColor() {
       let  characters = '123456789ABCDEF';
       let color = '#';
@@ -12,6 +16,7 @@
         color += characters.charAt(Math.floor(Math.random() * characters.length));
       }
       // console.log("Random color generated: " + color)
+      total_guesses++;
       return color;
     }
     function getDimmerColor(original) {
@@ -57,16 +62,30 @@
       if (left_lighter === guess) {
         $("#colorBox1").css("background-color", "#00FF00");
         $("#colorBox2").css("background-color", "#00FF00");
+        correct_guesses ++;
+        if (previous_correct === true) {
+          win_streak ++;
+        }
+        previous_correct = true;
         // console.log("Correct!")
       }
       else {
         $("#colorBox1").css("background-color", "#FF0000");
         $("#colorBox2").css("background-color", "#FF0000");
+        previous_correct = false;
+        win_streak = 0;
         // console.log("Incorrect!")
       }
       setTimeout(function() {
         setColors(left_lighter);
       }, 2000);
+    }
+    function updateText() {
+      let percentage = (correct_guesses / total_guesses) * 100;
+      $("#percentage").text(percentage.toFixed(0) + "%");
+      $("#totalGuesses").text(total_guesses);
+      $("#correctGuesses").text(correct_guesses);
+      $("#winStreak").text(win_streak);
     }
   </script>
   <title></title>
@@ -80,18 +99,27 @@
 <!--  </style>-->
 </head>
 <body onload="setColors();">
-<div id="container" style="width:90%; height:80vh; margin:auto;">
+<div id="container" style="width:90%; height:70vh; margin:auto;">
   <div id="colorBox1" style="width:40vw;height:90%;padding:10px;float:left;border-radius:20px;background-color:#000"></div>
   <div id="colorBox2" style="width:40vw;height:90%;padding:10px;float:right;border-radius:20px;background-color:#000"></div>
 </div>
 <div style="clear: both;"></div>
 <div style="text-align:center;">
-  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="checkColors(left_lighter, true);">Left one is Lighter</button>
-  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="checkColors(left_lighter, false);">Left one is Darker</button>
+  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="checkColors(left_lighter, true); updateText();">Left one is Lighter</button>
+  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="checkColors(left_lighter, false); updateText();">Left one is Darker</button>
   <br>
   <br>
   <br>
-  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="setColors();">New Color Set</button>
+  <button style="width:10vh;height:6vh;font-size:2vmin" onclick="setColors(); updateText();">New Color Set</button>
+  <br>
+  <br>
+  Win percentage: <span id="percentage"></span>
+  <br>
+  Total guesses: <span id="totalGuesses"></span>
+  <br>
+  Total correct: <span id="correctGuesses"></span>
+  <br>
+  Win streak: <span id="winStreak"></span>
 </div>
 </body>
 </html>
